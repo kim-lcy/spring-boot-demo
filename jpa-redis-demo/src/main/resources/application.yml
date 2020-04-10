@@ -1,0 +1,49 @@
+## 服务端口
+server:
+  port: 9002
+## 服务名
+spring:
+  application:
+    name: jps-redis-demo
+  datasource:
+    username: root
+    password: Mysql@RootP0D
+    url: jdbc:mysql://localhost:3306/tenant-center?&useUnicode=true&characterEncoding=UTF-8&useSSL=false
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+  jpa:
+    hibernate:
+      naming:
+        physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    properties:
+      ## 缓存策略，总是缓存
+      javax:
+        persistence:
+          sharedCache:
+            mode: ALL
+      ##二级缓存配置
+      hibernate:
+        cache:
+          ## 开启二级缓存
+          use_second_level_cache: true
+          ## 查询缓存
+          use_query_cache: true
+          ## RedisRegionFactory
+          region:
+            factory_class: org.hibernate.cache.redis.hibernate52.SingletonRedisRegionFactory
+          ## 缓存标示前缀
+          region_prefix: hibernate
+          ## 结构化缓存实体
+          use_structured_entries: true
+          ## 配置文件路径
+          provider_configuration_file_resource_path: classpath:conf/hibernate-redis.properties
+      redisson-config: classpath:conf/redisson.yaml
+      redis:
+        expiryInSeconds:
+          default: 120
+          hibernate:
+            common: 0
+            account: 1200
+    show-sql: true
